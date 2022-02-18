@@ -1,0 +1,16 @@
+body {
+    background-color: purple;
+    justify-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper {
+    max-width: 75vw;
+}
+
+.landing,
+table {
+    width: 75vw;
+    background-color: aliceblue;
+}
