@@ -14,3 +14,19 @@ table {
     width: 75vw;
     background-color: aliceblue;
 }
+
+tbody {
+    text-align: center;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    margin: 15px;
+    gap: 5px;
+}
+
+.form>* {
+    flex: none;
+}

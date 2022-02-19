@@ -3,7 +3,8 @@ authorinput = document.querySelector('#author')
 readinput = document.querySelector('#read')
 submitbutton = document.querySelector('#submit')
 resetbutton = document.querySelector('#reset')
-table = document.querySelector('table')
+tbody = document.querySelector('tbody')
+closebuttons = document.querySelectorAll('.smite')
 
 
 let library = []
@@ -24,10 +25,9 @@ submitbutton.addEventListener('click', () => {
     if (titleinput.value && authorinput.value) {
         let new1 = addBook(titleinput.value, authorinput.value, readinput.checked)
         library.push(new1)
-        console.log(library)
         createTable()
+        reset()
     }
-    console.table(library)
 })
 
 resetbutton.addEventListener('click', () => {
@@ -43,67 +43,91 @@ function reset() {
 Book.prototype.changeRead = function() {
     if (this.read == false) {
         this.read = true
+        return "Read"
     } else {
         this.read = false
+        return "Unread"
     }
 };
 
 function deleteEntry(library, title) {
-    let entry = findbook(library, title)
+    let entry = findBook(library, title)
+    console.log(entry)
     library.splice(entry, entry + 1)
-        //this only changes the library, not the webpage itself
+    createTable()
 }
 
-function findBook(library, title) {
+function changeEntry(library, title) {
+    let entry = findBook(library, title)
+
+    if (library[entry].read == false) {
+        library[entry].read = true
+        return true
+    } else if (library[entry].read == true) {
+        library[entry].read = false
+        return false
+    }
+    console.log(library[entry].read)
+}
+
+function findBook(library, nameofbook) {
     if (library.length === 0 || library === null) {
         return;
     }
-    for (title of library)
-        if (book.title === title) {
-            return library.indexOf(title);
+    for (books of library)
+        if (books.title == nameofbook) {
+
+            return library.indexOf(books);
         }
 }
 
 function createTable() {
+    tbody.innerHTML = ''
     library.forEach((book) => {
         let newRow = document.createElement("tr")
         let newTitle = document.createElement("td")
-        newTitle.textContent = this.title.value
+        newTitle.textContent = `${book.title}`
         let newAuthor = document.createElement("td")
-        newAuthor.textContent = this.author.value
+        newAuthor.textContent = `${book.author}`
         let newRead = document.createElement("td")
         let newButton = document.createElement("button")
-        newButton.textContent = this[read]
+        newButton.setAttribute('book', `${book.title}`)
+
+        newButton.className = 'toggle'
+        let newSmite = document.createElement("td")
+        let newSmiteButton = document.createElement("button")
+        newSmiteButton.setAttribute('book', `${book.title}`)
+        newSmiteButton.className = 'readtoggle'
+        newSmiteButton.textContent = `X`
+        newSmiteButton.className = 'smite'
+        newButton.innerHTML = (book.read == true) ? "Read" : "Unread"
+        console.log(book.read)
+        newSmite.appendChild(newSmiteButton)
         newRead.appendChild(newButton)
         newRow.appendChild(newTitle)
         newRow.appendChild(newAuthor)
         newRow.appendChild(newRead)
-        table.appendChild(newRow)
+        newRow.appendChild(newSmiteButton)
+        tbody.appendChild(newRow)
     });
+    closebuttons = document.querySelectorAll('.smite')
+    closebuttons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            deleteEntry(library, button.getAttribute("book"))
+        })
+    })
+
+    togglebuttons = document.querySelectorAll('.toggle')
+    togglebuttons.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            let test = changeEntry(library, button.getAttribute("book"))
+            console.log(e.currentTarget)
+
+            if (test === true) {
+                e.currentTarget.innerHTML = "Read"
+            } else if (test === false) {
+                e.currentTarget.innerHTML = "Unread"
+            }
+        })
+    })
 }
-
-//currentTarget for the button can be used to navigate the nodse so hat you find the name of the book
-
-//adding a dataset to the button equal to the title could be an inelegant solution
-
-//once we have our thing it's is Book.changeread i think
-
-//how hou
-
-
-// old working table code 
-//         let newRow = document.createElement("tr")
-//         let newTitle = document.createElement("td")
-//         newTitle.textContent = titleinput.value
-//         let newAuthor = document.createElement("td")
-//         newAuthor.textContent = authorinput.value
-//         let newRead = document.createElement("td")
-//         let newButton = document.createElement("button")
-//         newButton.textContent = readinput.checked
-//       newButton.
-//         reset()
-//         newRead.appendChild(newButton)
-//         newRow.appendChild(newTitle)
-//         newRow.appendChild(newAuthor)
-//         newRow.appendChild(newRead)
-//         table.appendChild(newRow)
